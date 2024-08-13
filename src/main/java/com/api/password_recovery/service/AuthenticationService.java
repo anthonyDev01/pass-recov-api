@@ -1,6 +1,7 @@
 package com.api.password_recovery.service;
 
 import com.api.password_recovery.domain.Usuario;
+import com.api.password_recovery.infra.exception.UserNotFoundException;
 import com.api.password_recovery.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,6 @@ public class AuthenticationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("usuario não encontrado"));
+        return usuarioRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("usuario não encontrado"));
     }
 }

@@ -1,5 +1,6 @@
 package com.api.password_recovery.infra.security;
 
+import com.api.password_recovery.infra.exception.UserNotFoundException;
 import com.api.password_recovery.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,7 +27,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (tokenJWT != null){
             String subject = this.tokenService.getSubject(tokenJWT);
-            UserDetails usuario = this.usuarioRepository.findByEmail(subject).orElseThrow(() -> new RuntimeException("usuario não encontrado"));
+            UserDetails usuario = this.usuarioRepository.findByEmail(subject).orElseThrow(() -> new UserNotFoundException("usuario não encontrado"));
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
