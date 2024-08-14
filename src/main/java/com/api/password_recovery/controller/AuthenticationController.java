@@ -31,8 +31,7 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private EmailService emailService;
+
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> login(@RequestBody LoginRequestDto body){
@@ -46,8 +45,7 @@ public class AuthenticationController {
     public ResponseEntity register(@RequestBody RegisterRequestDto body){
         Usuario user = this.userService.register(body);
         String token = tokenService.gerarToken(user);
-        String assunto = "Bem-vindo(a) " + user.getUsername() + "!";
-        emailService.sendEmail(user.getEmail(), assunto, BodyEmail.NEW_USER.getContent());
+
         return ResponseEntity.ok(new RegisterResponseDto(body.name(), token));
     }
 
