@@ -2,6 +2,7 @@ package com.api.password_recovery.service;
 
 import com.api.password_recovery.domain.Usuario;
 import com.api.password_recovery.dtos.requests.RegisterRequestDto;
+import com.api.password_recovery.infra.exception.UserAlreadyExistsException;
 import com.api.password_recovery.infra.security.SecurityConfigurations;
 import com.api.password_recovery.repository.UsuarioRepository;
 import org.springframework.beans.BeanUtils;
@@ -22,12 +23,14 @@ public class UserService {
     public Usuario register(RegisterRequestDto body){
         Optional<UserDetails> user = this.usuarioRepository.findByEmail(body.email());
 
-        if (user.isEmpty()){
-            Usuario newUser = new Usuario();
-            BeanUtils.copyProperties(body, newUser);
-            newUser.setPassword(this.securityConfigurations.passwordEncoder().encode(body.password()));
-            return this.usuarioRepository.save(newUser);
+        if (user.isPresent()){
+            throw new UserAlreadyExistsException("email já cadastrado");
         }
-        return  null;
+
+        Usuario newUser = new Usuario();
+        BeanUtils.copyProperties(body, newUser);
+        newUser.setPassword(this.securityConfigurations.passwordEncoder().encode(body.password()));
+        return this.usuarioRepository.save(newUser);
+
     }
 }

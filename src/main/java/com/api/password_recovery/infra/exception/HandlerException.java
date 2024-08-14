@@ -12,4 +12,9 @@ public class HandlerException {
     public ResponseEntity handlerUserNotFound(UserNotFoundException exception){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity handlerUserAltready(UserAlreadyExistsException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
+    }
 }
