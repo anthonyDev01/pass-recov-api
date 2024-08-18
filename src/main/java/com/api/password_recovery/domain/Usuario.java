@@ -23,6 +23,7 @@ public class Usuario implements UserDetails {
     private String name;
     private String email;
     private String password;
+    private Boolean confirmed;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

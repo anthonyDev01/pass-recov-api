@@ -32,7 +32,6 @@ public class AuthenticationController {
     private UserService userService;
 
 
-
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> login(@RequestBody LoginRequestDto body){
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(body.email(), body.password());
@@ -45,7 +44,6 @@ public class AuthenticationController {
     public ResponseEntity register(@RequestBody RegisterRequestDto body){
         Usuario user = this.userService.register(body);
         String token = tokenService.gerarToken(user);
-
         return ResponseEntity.ok(new RegisterResponseDto(body.name(), token));
     }
 

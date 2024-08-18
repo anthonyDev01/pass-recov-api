@@ -17,4 +17,9 @@ public class HandlerException {
     public ResponseEntity handlerUserAltready(UserAlreadyExistsException exception){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
     }
+
+    @ExceptionHandler(UserNotConfirmedException.class)
+    public ResponseEntity handlerUserNotConfirmed(UserNotConfirmedException exception){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE usuarios ADD confirmed TINYINT(0) NOT NULL DEFAULT 0;
