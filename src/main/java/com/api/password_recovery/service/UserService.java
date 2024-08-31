@@ -57,6 +57,14 @@ public class UserService {
         return this.usuarioRepository.save(user);
     }
 
+    public Usuario saveUser(Usuario usuario){
+        return this.usuarioRepository.save(usuario);
+    }
+
+    public Usuario getUserByEmail (String email){
+        return this.usuarioRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Usuario não encontrado"));
+    }
+
 
     public Usuario findUserByEmail (String email){
         return this.usuarioRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Usuario não encontrado"));

@@ -31,6 +31,29 @@ public enum BodyEmail {
                              >
                                  <a href="%s" style="text-decoration: none;">CONFIRMAR E-MAIL</a>
                              </div>
+                    """),
+    PASSWORD_RECOV(
+            """
+                            Assunto: Código de Recuperação de Senha
+                            <br></br>
+                          
+                            Olá,
+                            
+                            <br></br>
+                            
+                            Recebemos uma solicitação para redefinir sua senha. Para continuar o processo, use o código de recuperação abaixo:
+                            <br></br>
+                            
+                            %s
+                            
+                            <br></br>                 
+                            
+                            Se você não solicitou a redefinição de senha, por favor, ignore este e-mail ou entre em contato com nosso suporte.
+                            
+                            Atenciosamente,
+                            %s
+                            
+                            
                     """);
 
     private final String content;

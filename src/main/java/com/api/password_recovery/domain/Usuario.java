@@ -25,6 +25,9 @@ public class Usuario implements UserDetails {
     private String password;
     private Boolean confirmed;
 
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private UserPasswordReset userPasswordReset;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
