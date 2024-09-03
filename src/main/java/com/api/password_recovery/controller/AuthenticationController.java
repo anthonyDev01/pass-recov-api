@@ -12,12 +12,14 @@ import com.api.password_recovery.service.EmailService;
 import com.api.password_recovery.service.PasswordRecoveryService;
 import com.api.password_recovery.service.UserService;
 import com.api.password_recovery.util.BodyEmail;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -42,15 +44,20 @@ public class AuthenticationController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDto> login(@RequestBody LoginRequestDto body){
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(body.email(), body.password());
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        String tokenJWT = this.tokenService.gerarToken((Usuario) authentication.getPrincipal());
-        return ResponseEntity.ok(new TokenResponseDto(tokenJWT));
+    public ResponseEntity<?> login(@RequestBody @Valid LoginRequestDto body){
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(body.email(), body.password());
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            String tokenJWT = this.tokenService.gerarToken((Usuario) authentication.getPrincipal());
+            return ResponseEntity.ok(new TokenResponseDto(tokenJWT));
+        }catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas. Por favor, verifique seu email e senha.");
+        }
+
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegisterRequestDto body){
+    public ResponseEntity register(@RequestBody @Valid RegisterRequestDto body){
         Usuario user = this.userService.register(body);
         String token = tokenService.gerarToken(user);
         return ResponseEntity.ok(new RegisterResponseDto(body.name(), token));
@@ -63,8 +70,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody ResetRequestDto resetRequestDto){
+    public ResponseEntity<String> resetPassword(@RequestBody @Valid ResetRequestDto resetRequestDto){
         Usuario usuario = this.userService.getUserByEmail(resetRequestDto.email());
+        this.passwordRecoveryService.verifyPasswordRecoveIsNull(usuario);
+
         if(usuario.getUserPasswordReset().getPasswordCode().equals(resetRequestDto.resetCode()) &&
            usuario.getUserPasswordReset().getPasswordExpiry().isAfter(LocalDateTime.now())) {
 

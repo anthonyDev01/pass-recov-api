@@ -1,4 +1,7 @@
 package com.api.password_recovery.dtos.requests;
 
-public record ResetRequestDto(String email, String resetCode, String newPassword) {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public record ResetRequestDto(@Email String email, @NotBlank String resetCode, @NotBlank String newPassword) {
 }

@@ -1,6 +1,8 @@
 package com.api.password_recovery.infra.security;
 
 import com.api.password_recovery.domain.Usuario;
+import com.api.password_recovery.infra.exception.TokenInvalidException;
+import com.api.password_recovery.infra.exception.UserNotFoundException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -40,7 +42,7 @@ public class TokenService {
 
 
         } catch (JWTVerificationException exception){
-            throw new RuntimeException("Token JWT inválido ou expirado");
+            throw new TokenInvalidException("Token JWT invalido ou expirado!");
         }
     }
 
