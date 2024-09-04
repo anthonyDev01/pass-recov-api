@@ -12,6 +12,23 @@ services:
 
     volumes:
       - dbase:/var/lib/mysql
+    networks:
+      - my-network
+
+  app:
+    image: psw_recov_image
+    container_name: psw_recov_container
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/psw_db
+    ports:
+      - "9090:8080"
+    networks:
+      - my-network
 
 volumes:
   dbase:
+
+networks:
+  my-network:
+    driver: bridge
+
